@@ -9,7 +9,7 @@ import pywhatkit
 import pyjokes
 import wikipedia
 
-
+# IMPORTANT FUNCTIONS
 def take_commands():
     r = sr.Recognizer()
     with sr.Microphone() as source:
@@ -34,27 +34,61 @@ def take_commands():
 def Speak(audio):
     engine = pyttsx3.init()
     engine.getProperty('voices')
-    engine.setProperty('rate', 160)
+    engine.setProperty('rate', 140)
     engine.setProperty('volume', 1.0)
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
     engine.say(audio)
     engine.runAndWait()
 
+def cur_time():
+    t = dt.datetime.now().strftime('%I:%M %p')
+    Speak("The Current time is " + t)
+
+def date():
+    year = int(dt.datetime.now().year)
+    month = int(dt.datetime.now().month)
+    date = int(dt.datetime.now().day)
+    Speak("The Current date is ")
+    Speak(date)
+    Speak(month)
+    Speak(year)
+    
+def wishme():
+    Speak("Welcome back sir!")
+    cur_time()
+    date()
+    hour = dt.datetime.now().hour
+
+    if hour >= 6 and hour < 12:
+        Speak("Good Morning...")
+    
+    elif hour >= 12 and hour < 17:
+        Speak("Good Afternoon...")
+    
+    elif hour >=17 and hour <= 24:
+        Speak("Good Evening...")
+    
+    else:
+        Speak("Good Night...")
+
+    Speak("how may I help you sir!?")
+
 def introduction():
     desc_file = open("description.txt",'r')
     for desc in desc_file.readlines():
         Speak(desc)
 
-if __name__ == '__main__':
+# END OF FUNCTIONS
 
-    Speak("Hello Sir....how may I help you?")
+if __name__ == '__main__':
     
+    wishme()
+
     while True:
         print("Actions Performed----> Commands")
         print("\nFOR EXIT----> Exit\n"
         "Introduction-----> Introduce yourself\n"
-        "Time--------> What is the time right now?\n"
         "Jokes--------> tell me a joke\n"
         "Google Search--------> Search {topic}\n"
         "Wikipedia--------> Who is {topic}\n"
@@ -70,16 +104,12 @@ if __name__ == '__main__':
         "MS-EXCEL--------> open Excel\n"
         "GOOGLE CHROME --------> open Chrome\n"
         "NOTEPAD--------> open Notepad")
+
         time.sleep(5)
         command = take_commands()
 
         if "introduce yourself" in command:
                 introduction()
-        
-        elif "what is the time right now" in command:
-            t = dt.datetime.now().strftime('%I:%M %p')
-            print("\n{0}".format(t))
-            Speak("Current time is " + t)
 
         elif "tell me a joke" in command:
             Speak(pyjokes.get_joke())
