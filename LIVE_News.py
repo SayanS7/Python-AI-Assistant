@@ -1,5 +1,6 @@
 import requests    
- 
+from win32com.client import Dispatch
+
 def News():
 
     query_params = {
@@ -23,7 +24,6 @@ def News():
          
         print(i + 1, results[i])
  
-    from win32com.client import Dispatch
     speak = Dispatch("SAPI.Spvoice")
     speak.Speak(results)                
  

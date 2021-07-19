@@ -56,8 +56,6 @@ def date():
     
 def wishme():
     Speak("Welcome back sir!")
-    cur_time()
-    date()
     hour = dt.datetime.now().hour
 
     if hour >= 6 and hour < 12:
@@ -71,8 +69,10 @@ def wishme():
     
     else:
         Speak("Good Night...")
-
-    Speak("how may I help you sir!?")
+    
+    cur_time()
+    date()
+    Speak("Jarvis here...how may I help you sir!?")
 
 def introduction():
     desc_file = open("description.txt",'r')
@@ -90,8 +90,8 @@ if __name__ == '__main__':
         print("\nFOR EXIT----> Exit\n"
         "Introduction-----> Introduce yourself\n"
         "Jokes--------> tell me a joke\n"
-        "Google Search--------> Search {topic}\n"
-        "Wikipedia--------> Who is {topic}\n"
+        "Google Search-----> Search Google for {topic}\n"
+        "Wikipedia---------> Search Wikipedia for {topic}\n"
         "Live News From BBC------> what's in the news\n"
         "Youtube--------> play {title}\n"
         "Facebook--------> open Facebook\n"
@@ -115,8 +115,8 @@ if __name__ == '__main__':
             Speak(pyjokes.get_joke())
             break
 
-        elif "search" in command:
-            go_search = command.replace('search', '')
+        elif "search Google for" in command:
+            go_search = command.replace('search Google for', '')
             Speak('searching ' + go_search)
             pywhatkit.search(go_search)
             break
@@ -127,8 +127,8 @@ if __name__ == '__main__':
             pywhatkit.playonyt(song)
             break
 
-        elif "who is" in command:
-            wiki_search = command.replace('who is', '')
+        elif "search Wikipedia for" in command:
+            wiki_search = command.replace('search Wikipedia for', '')
             info = wikipedia.summary(wiki_search, 2)
             print(info)
             Speak(info)
@@ -180,7 +180,7 @@ if __name__ == '__main__':
 
         elif "exit" in command:
             Speak("exiting...")
-            Speak("Thank you...have a nice day...sir")
+            Speak("Thank you...have a nice day sir!")
             break
 
         else:
