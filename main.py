@@ -1,4 +1,3 @@
-from re import search
 from LIVE_News import News
 from weather_update import weather
 import speech_recognition as sr
