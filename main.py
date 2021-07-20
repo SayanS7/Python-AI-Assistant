@@ -1,4 +1,6 @@
+from re import search
 from LIVE_News import News
+from weather_update import weather
 import speech_recognition as sr
 import pyttsx3
 import datetime as dt
@@ -14,9 +16,9 @@ def take_commands():
     r = sr.Recognizer()
     with sr.Microphone() as source:
         print("Listening...")
-        r.pause_threshold = 0.7
+        r.pause_threshold = 1
         r.adjust_for_ambient_noise(source)
-        audio = r.listen(source)
+        audio = r.listen(source, timeout=5, phrase_time_limit=8)
         try:
             print("Recognization")
             Query = r.recognize_google(audio, language='en-in')
@@ -34,7 +36,7 @@ def take_commands():
 def Speak(audio):
     engine = pyttsx3.init()
     engine.getProperty('voices')
-    engine.setProperty('rate', 140)
+    engine.setProperty('rate', 160)
     engine.setProperty('volume', 1.0)
     voices = engine.getProperty('voices')
     engine.setProperty('voice', voices[0].id)
@@ -43,13 +45,13 @@ def Speak(audio):
 
 def cur_time():
     t = dt.datetime.now().strftime('%I:%M %p')
-    Speak("The Current time is " + t)
+    Speak("its " + t)
 
 def date():
     year = int(dt.datetime.now().year)
     month = int(dt.datetime.now().month)
     date = int(dt.datetime.now().day)
-    Speak("The Current date is ")
+    Speak("Today's date is ")
     Speak(date)
     Speak(month)
     Speak(year)
@@ -57,6 +59,7 @@ def date():
 def wishme():
     Speak("Welcome back sir!")
     hour = dt.datetime.now().hour
+    cur_time()
 
     if hour >= 6 and hour < 12:
         Speak("Good Morning...")
@@ -70,9 +73,7 @@ def wishme():
     else:
         Speak("Good Night...")
     
-    cur_time()
-    date()
-    Speak("Jarvis here...how may I help you sir!?")
+    Speak("I am Jarvis...how may I help you sir!?")
 
 def introduction():
     desc_file = open("description.txt",'r')
@@ -89,31 +90,34 @@ if __name__ == '__main__':
         print("Actions Performed----> Commands")
         print("\nFOR EXIT----> Exit\n"
         "Introduction-----> Introduce yourself\n"
+        "Current Date-----> what's today's date\n"
         "Jokes--------> tell me a joke\n"
         "Google Search-----> Search Google for {topic}\n"
         "Wikipedia---------> Search Wikipedia for {topic}\n"
         "Live News From BBC------> what's in the news\n"
+        "Temperaure of any city---->what's the temperature in{city}\n"
         "Youtube--------> play {title}\n"
         "Facebook--------> open Facebook\n"
         "Instagram--------> open Instagram\n"
         "Twitter--------> open Twitter\n"
-        "Amazon--------> open Amazon\n"
-        "Flipkart--------> open Flipkart\n"
+        "GitHub---------> open GitHub"
         "MS-WORD--------> open Word\n"
         "MS-POWERPOINT--------> open PowerPoint\n"
         "MS-EXCEL--------> open Excel\n"
-        "GOOGLE CHROME --------> open Chrome\n"
+        "GOOGLE CHROME------> open Chrome\n"
         "NOTEPAD--------> open Notepad")
 
         time.sleep(5)
         command = take_commands()
 
         if "introduce yourself" in command:
-                introduction()
+            introduction()
+
+        elif "what's today's date" in command:
+             date()
 
         elif "tell me a joke" in command:
             Speak(pyjokes.get_joke())
-            break
 
         elif "search Google for" in command:
             go_search = command.replace('search Google for', '')
@@ -136,7 +140,10 @@ if __name__ == '__main__':
 
         elif "what's in the news" in command:
             News()
-            break
+        
+        elif "what's the temperature in" in command:
+            search = command.replace("what's the ", '')
+            weather(search)
 
         elif "open Word" in command:
             Speak("Opening Microsoft Word")
@@ -170,13 +177,9 @@ if __name__ == '__main__':
             Speak("Opening Twitter")
             webbrowser.open("www.twitter.com/home")
 
-        elif "open Amazon" in command:
-            Speak("Opening Amazon")
-            webbrowser.open("www.amazon.in")
-
-        elif "open Flipkart" in command:
-            Speak("Opening Flipkart")
-            webbrowser.open("www.flipkart.com")
+        elif "open GitHub" in command:
+            Speak("Opening GitHub")
+            webbrowser.open("https://github.com/SayanS7")
 
         elif "exit" in command:
             Speak("exiting...")
