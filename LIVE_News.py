@@ -12,16 +12,12 @@ def News():
  
     res = requests.get(main_url, params=query_params)
     open_bbc_page = res.json()
- 
     article = open_bbc_page["articles"]
- 
     results = []
-     
     for ar in article:
-        results.append(ar["title"])
-         
+        results.append(ar["title"])     
+    
     for i in range(len(results)):
-         
         print(i + 1, results[i])
  
     speak = Dispatch("SAPI.Spvoice")
