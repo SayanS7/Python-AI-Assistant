@@ -2,6 +2,7 @@ from LIVE_News import News
 from weather_update import weather
 import speech_recognition as sr
 import pyttsx3
+from tkinter import *
 import datetime as dt
 import os
 import time
@@ -12,19 +13,32 @@ import wikipedia
 import psutil
 import pyautogui
 
+root = Tk()
+root.geometry('700x700+400+85')
+root.title("ECHO : AI Voice Assistant")
+
+global var
+global var2
+
+var = StringVar()
+var2 = StringVar()
+
 # IMPORTANT FUNCTIONS
 def take_commands():
     r = sr.Recognizer()
     with sr.Microphone() as source:
+        var.set("Listening...")
+        root.update()
         print("Listening...")
         r.pause_threshold = 1
+        r.energy_threshold = 400
         r.adjust_for_ambient_noise(source)
-        audio = r.listen(source, timeout=5, phrase_time_limit=8)
+        audio = r.listen(source)
         try:
-            print("Recognization")
+            var.set("Recognizing...")
+            root.update()
+            print("Recognizing")
             Query = r.recognize_google(audio, language='en-in')
-            if 'Jarvis' in Query:
-                Query = Query.replace('Jarvis','')
             print("user : ' ", Query, " ' ")
         except Exception as e:
             print(e)
@@ -78,7 +92,7 @@ def wishme():
     else:
         Speak("Good Night...")
 
-    Speak("I am Jarvis...how may I help you sir!?")
+    Speak("I am Echo...how may I help you sir!?")
 
 def introduction():
     desc_file = open("description.txt",'r')
@@ -90,7 +104,6 @@ def TaskExecution():
 
     while True:
         command = take_commands()
-
         # Basic Tasks
         if "introduce yourself" in command:
             introduction()
@@ -110,11 +123,6 @@ def TaskExecution():
                 os.system("start winword")
                 time.sleep(5)
             
-            elif open_app == "PowerPoint":
-                Speak("Opening Microsoft Powerpoint")
-                os.system("start powerpnt")
-                time.sleep(5)
-            
             elif open_app == "Excel":
                 Speak("Opening Microsoft Excel")
                 os.system("start excel")
@@ -125,64 +133,67 @@ def TaskExecution():
                 os.system("start notepad")
                 time.sleep(5)
 
-            elif open_app == "Facebook":
-                Speak("sir, please enter the user name manually")
-                name = input("Enter username here : ")
-                webbrowser.open(f"www.facebook.com/{name}")
-                Speak(f"sir here is the profile of the user {name}")
-                time.sleep(5)
+            # linkdin
 
-            elif open_app == "Instagram":
-                Speak("sir, please enter the user name manually")
-                name = input("Enter username here : ")
-                webbrowser.open(f"www.instagram.com/{name}")
-                Speak(f"sir here is the profile of the user {name}")
-                time.sleep(5)
-            
-            elif open_app == "Twitter":
-                Speak("Opening Twitter")
-                webbrowser.open("www.twitter.com/")
+            elif open_app == "leetcode":
+                Speak("Opening leetcode")
+                webbrowser.open("https://leetcode.com")
                 time.sleep(5)
             
             elif open_app == "GitHub":
-                Speak("sir, please enter the user name manually")
-                name = input("Enter username here : ")
-                webbrowser.open(f"https://github.com/{name}")
-                Speak(f"sir here is the profile of the user {name}")
+                Speak("Opening GitHub")
+                webbrowser.open("https://github.com")
+                time.sleep(5)
+
+            elif open_app == "Facebook":
+                Speak("Opening Facebook")
+                webbrowser.open("www.facebook.com")
+                time.sleep(5)
+
+            elif open_app == "Instagram":
+                Speak("Opening Instagram")
+                webbrowser.open("www.instagram.com")
+                time.sleep(5)
+
+            elif open_app == "Twitter":
+                Speak("Opening Twitter")
+                webbrowser.open("www.twitter.com/")
                 time.sleep(5)
 
         # Advance Features
         elif "tell me a joke" in command:
             Speak(pyjokes.get_joke())
 
-        elif "search Google for" in command:
-            go_search = command.replace('search Google for', '')
+        elif "search Google for " in command:
+            go_search = command.replace('search Google for ', '')
             Speak('searching ' + go_search)
             pywhatkit.search(go_search)
             time.sleep(5)
 
-        elif "search Youtube for" in command:
-            yt_search = command.replace('search Youtube for', '')
-            Speak('playing ' + yt_search)
+        elif "search YouTube for " in command:
+            yt_search = command.replace("search Youtube for ", "")
+            Speak('playing ')
             pywhatkit.playonyt(yt_search)
             time.sleep(5)
 
-        elif "search Wikipedia for" in command:
-            wiki_search = command.replace('search Wikipedia for', '')
-            info = wikipedia.summary(wiki_search, 2)
+        elif "who is " in command:
+            wiki_search = command.replace("who is ", "")
+            info = wikipedia.summary(wiki_search, sentences=2)
             Speak("According to Wikipedia")
             print(info)
+            root.update()
             Speak(info)
             time.sleep(5)
 
-        elif "what's in the news" in command:
+        elif "live news" in command:
+            root.update()
             News()
         
-        elif "what's the weather in" in command:
-            city_name = command.replace("what's the weather in ", '')
+        elif "weather in" in command:
+            city_name = command.replace("weather in ", '')
             weather(city_name)
 
-        elif "show me the CPU and battery percentage" in command:
+        elif "CPU and battery percentage" in command:
             cpu()
 
         elif "remember that" in command:
@@ -201,32 +212,51 @@ def TaskExecution():
                 Speak("Checking To-Do list...")
                 Speak(remember.readlines())
 
-        elif "switch the window" in command:
+        elif "switch window" in command:
             pyautogui.keyDown("alt")
             pyautogui.press("tab")
             time.sleep(1)
             pyautogui.keyUp("alt")
-
-        elif "take screenshot" in command or "take a screenshot" in command:
-            Speak("sir, please tell me the name for this screenshot file")
-            name = command().lower()
-            Speak("please hold the screen for few seconds, i am taking the screenshot")
-            time.sleep(3)
-            img = pyautogui.screenshot()
-            img.save(f"{name}.png")
-            Speak("I am done sir, the screenshot is saved in our main folder")
 
         elif "goodbye" in command:
             Speak("Thank you...have a nice day sir!")
             break
 
         else:
-            Speak(command)
             Speak("Pardon me, please repeat that again sir!")
 
 
+
+def update(ind):
+    frame = frames[(ind)%100]
+    ind += 1
+    label.configure(image=frame)
+    root.after(100, update, ind)
 # END OF FUNCTIONS
 
-if __name__ == '__main__':
+# GUI 
+label2 = Label(root, textvariable = var2, bg = '#FAB60C')
+label2.config(font=("Courier", 20))
+var2.set('User Said:')
+label2.pack()
 
-    TaskExecution()
+label1 = Label(root, textvariable = var, bg = '#ADD8E6')
+label1.config(font=("Courier", 20))
+var.set('Welcome')
+label1.pack()
+
+frames = [PhotoImage(file='img/Assistant.gif',format = 'gif -index %i' %(i)) for i in range(100)]
+
+label = Label(root, width = 500, height = 500)
+label.pack()
+root.after(0, update, 0)
+
+btn = Button(text = 'Run Assistant',width = 20, command = TaskExecution, bg = '#5C85FB')
+btn.config(font=("Courier", 16))
+btn.pack()
+
+btn1 = Button(text = 'Exit Window',width = 20,command = root.destroy, bg = '#5C85FB')
+btn1.config(font=("Courier", 16))
+btn1.pack()
+
+root.mainloop()
