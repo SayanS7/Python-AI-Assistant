@@ -1,9 +1,7 @@
 # Python-AI-Assistant
-@ About Project
-------------------------
 A virtual assistant, also called an AI assistant or digital assistant, is an application program that understands natural language voice commands and completes tasks for the user.
 
-@ Features
+Features
 -------------------
 * Current Date Time
 * Live News
@@ -14,7 +12,7 @@ A virtual assistant, also called an AI assistant or digital assistant, is an app
 * Openning webites like Facebook, Instagram, Twitter
 * Opening desktop applications like MS-Word, Notepad
 
-@ Specification
+Specification
 -------------------
 Python Libraries : 
   speech_recognition,
