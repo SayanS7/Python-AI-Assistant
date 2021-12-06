@@ -11,8 +11,8 @@ Features
 * Wikipedia
 * Telling Jokes
 * Openning websites like Facebook, Instagram, Twitter
-* Opening desktop applications like MS-Word, Notepad
-* and many more features yet to come...
+* Opening desktop applications like MS-Word, Notepad and
+* more features yet to come.......
 
 Specification
 -------------------
