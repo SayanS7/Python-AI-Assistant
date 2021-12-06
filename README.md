@@ -9,8 +9,10 @@ Features
 * Google Search
 * Youtube Search
 * Wikipedia
-* Openning webites like Facebook, Instagram, Twitter
+* Telling Jokes
+* Openning websites like Facebook, Instagram, Twitter
 * Opening desktop applications like MS-Word, Notepad
+* and many more features yet to come...
 
 Specification
 -------------------
